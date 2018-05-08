@@ -1,0 +1,36 @@
+FROM evancui/nmbuildbase AS nodemgrrelease
+WORKDIR /src
+ADD https://api.github.com/repos/EvanCui/whpc-linux-communicator/compare/master...HEAD
+ADD https://api.github.com/repos/EvanCui/spdlog/compare/master...HEAD
+RUN git clone https://github.com/coolmay/whpc-linux-communicator.git
+RUN git clone https://github.com/EvanCui/spdlog.git
+WORKDIR /src/whpc-linux-communicator/nodemanager
+ENV TERM=xterm
+RUN make release -l 14 -j 14
+RUN make release
+
+FROM microsoft/aspnetcore-build:2.0 AS hpcacmbuild
+WORKDIR /src
+ADD https://api.github.com/repos/EvanCui/hpc-acm/compare/master...HEAD /dev/null
+RUN git clone https://github.com/EvanCui/hpc-acm.git
+WORKDIR /src/hpc-acm/src/Services/NodeAgent
+RUN dotnet publish -c Release -o /app/NodeAgent
+
+FROM evancui/nmexecbase AS final
+COPY --from=nodemgrrelease /src/whpc-linux-communicator/nodemanager/bin/release/ /opt/hpcnodemanager
+COPY --from=hpcacmbuild /app/NodeAgent/ /app/NodeAgent/
+RUN mv filters/ filters1
+RUN echo '\n\
+./nodemanager & \n\
+cd /app/NodeAgent/ \n\
+dotnet NodeAgent.dll "$@" \n\
+' > start.sh
+RUN echo '{ \n\
+    "HeartbeatUri":"http://localhost:8080/api/callback/computenodereported", \n\
+    "TaskCompletionUri":"http://localhost:8080/api/callback/taskcompleted", \n\
+    "RegisterUri":"http://localhost:8080/api/callback/registerrequested", \n\
+    "ListeningUri":"http://0.0.0.0:40000", \n\
+    "Debug":false, \n\
+    "LogLevel":1 \n\
+}' > nodemanager.json
+ENTRYPOINT ["bash", "./start.sh"]

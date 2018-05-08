@@ -1,0 +1,13 @@
+FROM ubuntu AS nodemgrbuildbase
+RUN apt update
+RUN apt install -y git g++ make libssl-dev libboost-all-dev cmake
+
+FROM nodemgrbuildbase AS casa
+WORKDIR /src/evancasa
+RUN git clone https://github.com/EvanCui/cpprestsdk.git cpprestsdk
+WORKDIR /src/evancasa/cpprestsdk/Release/build.release
+RUN CXX=g++ cmake .. -DCMAKE_BUILD_TYPE=Release
+RUN make -l 10 -j 10
+RUN echo /src/evancasa/cpprestsdk/Release/build.release/Binaries > /etc/ld.so.conf.d/cpprest.conf
+RUN ldconfig
+

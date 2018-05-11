@@ -10,4 +10,3 @@ WORKDIR /src/casa/Release/build.release
 RUN cmake .. -DCMAKE_BUILD_TYPE=Release
 RUN make -l $(nproc) -j $(nproc)
 RUN make install
-

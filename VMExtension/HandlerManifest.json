@@ -1,0 +1,14 @@
+[{
+  "name": "HPCACMAgent",
+  "version": 1.0,
+  "handlerManifest": {
+    "installCommand": "hpcacmagent.py -install",
+    "uninstallCommand": "hpcacmagent.py -uninstall",
+    "updateCommand": "hpcacmagent.py -update",
+    "enableCommand": "hpcacmagent.py -enable",
+    "disableCommand": "hpcacmagent.py -disable",
+    "rebootAfterInstall": false,
+    "reportHeartbeat": false,
+    "updateMode": "UpdateWithInstall"
+  }
+}]

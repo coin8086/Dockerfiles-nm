@@ -12,16 +12,18 @@ WORKDIR /src
 ADD https://api.github.com/repos/EvanCui/hpc-acm/compare/master...HEAD /dev/null
 RUN git clone https://github.com/EvanCui/hpc-acm.git
 WORKDIR /src/hpc-acm/src/Services/NodeAgent
-RUN dotnet publish -c Release -o /app/NodeAgent
+RUN dotnet publish -c Release -r linux-x64 --self-contained -o /app/NodeAgent
 
 FROM evancui/nodemanager:nmexecbase AS final
 COPY --from=nodemgrrelease /src/whpc-linux-communicator/nodemanager/bin/release/ /opt/hpcnodemanager
 COPY --from=hpcacmbuild /app/NodeAgent/ /app/NodeAgent/
+COPY ./VMExtension/ /app/
+COPY ./publish/ /publish/
 RUN mv filters/ filters1
 RUN echo '\n\
 ./nodemanager & \n\
 cd /app/NodeAgent/ \n\
-dotnet NodeAgent.dll "$@" \n\
+./NodeAgent "$@" \n\
 ' > start.sh
 RUN echo '{ \n\
     "HeartbeatUri":"http://localhost:8080/api/callback/computenodereported", \n\

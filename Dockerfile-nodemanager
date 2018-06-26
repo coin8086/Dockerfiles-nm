@@ -19,7 +19,9 @@ COPY --from=nodemgrrelease /src/whpc-linux-communicator/nodemanager/bin/release/
 COPY --from=hpcacmbuild /app/NodeAgent/ /app/NodeAgent/
 COPY ./VMExtension/ /app/
 COPY ./publish/ /publish/
-RUN mv filters/ filters1
+RUN rm -rf filters
+RUN rm -rf certs
+RUN mv -rf logs
 RUN echo '\n\
 ./nodemanager & \n\
 cd /app/NodeAgent/ \n\

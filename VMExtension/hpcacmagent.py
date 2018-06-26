@@ -320,7 +320,8 @@ def _subprocess(exec_path_args, work_dir, stdoutfile, stderrfile):
     while True:
         out = open(stdoutfile, 'a')
         err = open(stderrfile, 'a')
-        child_process = subprocess.Popen(exec_path_args, stdout=out, stderr=err, cwd=work_dir, shell=True)
+        infile = open(os.devnull, 'r')
+        child_process = subprocess.Popen(exec_path_args, stdin=infile, stdout=out, stderr=err, cwd=work_dir, shell=True)
         if child_process.pid is None or child_process.pid < 1:
             exit_msg = 'Failed to start process {0}'.format(exec_path_args)
             hutil.do_status_report('Enable', 'error', 1, exit_msg)

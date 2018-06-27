@@ -150,7 +150,16 @@ def _install_psutils():
         waagent.Log("Error installing psutil")
 
 def _install_pip():
-    _check_and_install_package("python-pip", "pip")
+    ec = waagent.run("curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py", chk_err=false)
+    if ec != 0:
+        waagent.Log("get-pip.py was not downloaded, {0}".format(ec))
+        raise Exception("failed to install package python-pip:{0}".format(ec))
+    waagent.Log("get-pip.py was downloaded")
+    ec = waagent.run("python get-pip.py", chk_err=false)
+    if ec != 0:
+        waagent.Log("get-pip.py run failed, {0}".format(ec))
+        raise Exception("failed to install package python-pip:{0}".format(ec))
+    waagent.Log("python-pip was installed")
 
 def _check_and_install_package(pkg, cmd = None):
     if not cmd:
@@ -456,38 +465,42 @@ def install():
         hutil.do_exit(1, 'Install','error','1', '{0}'.format(e))
 
 def enable():
-    #Check whether monitor process is running.
-    #If it does, return. Otherwise clear pid file
-    hutil = parse_context('Enable')
-    if os.path.isfile(DaemonPidFilePath):
-        pid = waagent.GetFileContents(DaemonPidFilePath)
-        if os.path.isdir(os.path.join("/proc", pid)) and _is_nodemanager_daemon(pid):
-            if hutil.is_seq_smaller():
-                hutil.do_exit(0, 'Enable', 'success', '0', 
-                              'HPC Linux node manager daemon is already running')
-            else:
-                waagent.Log("Stop old daemon: {0}".format(pid))
-                os.killpg(int(pid), 9)
-        os.remove(DaemonPidFilePath)
+    try:
+        #Check whether monitor process is running.
+        #If it does, return. Otherwise clear pid file
+        hutil = parse_context('Enable')
+        if os.path.isfile(DaemonPidFilePath):
+            pid = waagent.GetFileContents(DaemonPidFilePath)
+            if os.path.isdir(os.path.join("/proc", pid)) and _is_nodemanager_daemon(pid):
+                if hutil.is_seq_smaller():
+                    hutil.do_exit(0, 'Enable', 'success', '0', 
+                                'HPC Linux node manager daemon is already running')
+                else:
+                    waagent.Log("Stop old daemon: {0}".format(pid))
+                    os.killpg(int(pid), 9)
+            os.remove(DaemonPidFilePath)
 
-    args = [os.path.join(os.getcwd(), __file__), "daemon"]
-    devnull = open(os.devnull, 'w')
-    child = subprocess.Popen(args, stdout=devnull, stderr=devnull, preexec_fn=os.setsid)
-    if child.pid is None or child.pid < 1:
-        hutil.do_exit(1, 'Enable', 'error', '1',
-                      'Failed to launch HPC Linux node manager daemon')
-    else:
-        hutil.save_seq()
-        waagent.SetFileContents(DaemonPidFilePath, str(child.pid))
-        #Sleep 3 seconds to check if the process is still running
-        time.sleep(3)
-        if child.poll() is None:
-            waagent.Log("Daemon pid: {0}".format(child.pid))
-            hutil.do_exit(0, 'Enable', 'success', '0',
-                      'HPC Linux node manager daemon is enabled')
+        args = [os.path.join(os.getcwd(), __file__), "daemon"]
+        devnull = open(os.devnull, 'w')
+        child = subprocess.Popen(args, stdout=devnull, stderr=devnull, preexec_fn=os.setsid)
+        if child.pid is None or child.pid < 1:
+            hutil.do_exit(1, 'Enable', 'error', '1',
+                        'Failed to launch HPC Linux node manager daemon')
         else:
-            hutil.do_exit(1, 'Enable', 'error', '2',
-                      'Failed to launch HPC Linux node manager daemon')
+            hutil.save_seq()
+            waagent.SetFileContents(DaemonPidFilePath, str(child.pid))
+            #Sleep 3 seconds to check if the process is still running
+            time.sleep(3)
+            if child.poll() is None:
+                waagent.Log("Daemon pid: {0}".format(child.pid))
+                hutil.do_exit(0, 'Enable', 'success', '0',
+                        'HPC Linux node manager daemon is enabled')
+            else:
+                hutil.do_exit(1, 'Enable', 'error', '2',
+                        'Failed to launch HPC Linux node manager daemon')
+    except Exception, e:
+        waagent.Log("Failed to enable the extension with error: %s, stack trace: %s" %(str(e), traceback.format_exc()))
+        hutil.do_exit(1, 'Enable','error','1', "Enable failed. {0} {1}".format(str(e), traceback.format_exc()))
 
 def daemon():
     hutil = parse_context('Enable')

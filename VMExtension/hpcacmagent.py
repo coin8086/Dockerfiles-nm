@@ -171,6 +171,12 @@ def _check_and_install_package(pkg, cmd = None):
         install_package(pkg)
         waagent.Log("{0} was successfully installed".format(pkg))
 
+def _install_python_devel():
+    _check_and_install_package("python-devel")
+
+def _install_libunwind():
+    _check_and_install_package("libunwind")
+
 def _install_sysstat():
     _check_and_install_package("sysstat", "iostat")
 
@@ -362,6 +368,8 @@ def install():
         cleanup_host_entries()
         _uninstall_nodemanager_files()
         _install_cgroup_tool()
+        _install_libunwind()
+        _install_python_devel()
         _install_sysstat()
         _install_psutils()
 

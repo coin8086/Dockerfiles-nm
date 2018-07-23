@@ -143,6 +143,7 @@ def _install_cgroup_tool():
         waagent.Log("cgroup tool was successfully installed")
 
 def _install_psutils():
+    _install_gcc()
     _install_pip()
     if waagent.Run("pip install psutil", chk_err=False) == 0:
         waagent.Log("psutil installed")
@@ -170,6 +171,9 @@ def _check_and_install_package(pkg, cmd = None):
         waagent.Log("Start to install {0}".format(pkg))
         install_package(pkg)
         waagent.Log("{0} was successfully installed".format(pkg))
+
+def _install_gcc():
+    _check_and_install_package("gcc")
 
 def _install_python_devel():
     _check_and_install_package("python-devel")

@@ -15,7 +15,10 @@ Param
     [Switch] $MoonCake,
 
     [Parameter(Mandatory=$false, ParameterSetName="Publish")]
-    [String[]] $Regions = @()
+    [String[]] $Regions = @(),
+
+    [Parameter(Mandatory=$false)]
+    [Switch] $Force
 )
 
 $bodyxml = @"
@@ -68,18 +71,21 @@ else
 
 if($MoonCake.IsPresent)
 {
-    Select-AzureSubscription -SubscriptionName "HPCMC-Suzhu"
     $uri = "https://management.core.chinacloudapi.cn/5a08dd6d-4a18-4f07-bebb-aeaf6167e4d8/services/extensions?action=update"
 }
 else
 {
-    Select-AzureSubscription -SubscriptionName "HPCVM"
     $uri = "https://management.core.windows.net/630763e2-8d65-4e0e-b2be-328808b2f120/services/extensions?action=update"
 }
 $bodyxml
 $cert = Get-Item "Cert:\CurrentUser\My\66B77C31C37A0A4A4957335DF94E876E0C05F4F8"
+
+if (-not $Force.IsPresent)
+{
 if(-not $PsCmdlet.ShouldProcess("Start to update the VM extension to $Version", "Continue to update the VM extension to $Version ?", "Confirm"))
 {
     throw "Abort to update the VM extension to $Version."
 }
+}
+
 Invoke-RestMethod -Method Put -Uri $uri -Certificate $cert -Headers @{'x-ms-version'='2014-12-01'} -Body $bodyxml -ContentType application/xml

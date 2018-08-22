@@ -480,34 +480,43 @@ def enable():
     try:
         #Check whether monitor process is running.
         #If it does, return. Otherwise clear pid file
+        waagent.Log("enable() called.")
         hutil = parse_context('Enable')
         if os.path.isfile(DaemonPidFilePath):
             pid = waagent.GetFileContents(DaemonPidFilePath)
+            waagent.Log("Discovered daemon pid: {0}".format(pid))
             if os.path.isdir(os.path.join("/proc", pid)) and _is_nodemanager_daemon(pid):
                 if hutil.is_seq_smaller():
+                    waagent.Log("Sequence is smaller skip killing")
                     hutil.do_exit(0, 'Enable', 'success', '0', 
                                 'HPC Linux node manager daemon is already running')
                 else:
                     waagent.Log("Stop old daemon: {0}".format(pid))
                     os.killpg(int(pid), 9)
+            waagent.Log("Remove the daemon pid file: {0}".format(DaemonPidFilePath))
             os.remove(DaemonPidFilePath)
 
         args = [os.path.join(os.getcwd(), __file__), "daemon"]
         devnull = open(os.devnull, 'w')
+        waagent.Log("Starting daemon process")
         child = subprocess.Popen(args, stdout=devnull, stderr=devnull, preexec_fn=os.setsid)
         if child.pid is None or child.pid < 1:
+            waagent.Log("failed to start the daemon process")
             hutil.do_exit(1, 'Enable', 'error', '1',
                         'Failed to launch HPC Linux node manager daemon')
         else:
+            waagent.Log("started the daemon process, save seq")
             hutil.save_seq()
+            waagent.Log("started the daemon process, save pid {0}".format(child.pid))
             waagent.SetFileContents(DaemonPidFilePath, str(child.pid))
             #Sleep 3 seconds to check if the process is still running
             time.sleep(3)
             if child.poll() is None:
-                waagent.Log("Daemon pid: {0}".format(child.pid))
+                waagent.Log("3 seconds later, success, Daemon pid: {0}".format(child.pid))
                 hutil.do_exit(0, 'Enable', 'success', '0',
                         'HPC Linux node manager daemon is enabled')
             else:
+                waagent.Log("3 seconds later, failed, Daemon pid: None")
                 hutil.do_exit(1, 'Enable', 'error', '2',
                         'Failed to launch HPC Linux node manager daemon')
     except Exception, e:
@@ -582,23 +591,27 @@ def uninstall():
     hutil.do_exit(0,'Uninstall','success','0', 'Uninstall succeeded')
 
 def disable():
+    waagent.Log("disable() called.")
     hutil = parse_context('Disable')
     #TODO where to kill the node manager
     #Check whether monitor process is running.
     #If it does, kill it. Otherwise clear pid file
     if os.path.isfile(DaemonPidFilePath):
         pid = waagent.GetFileContents(DaemonPidFilePath)
+        waagent.Log("Discovered daemon pid: {0}".format(pid))
         if os.path.isdir(os.path.join("/proc", pid)) and _is_nodemanager_daemon(pid):
             waagent.Log(("Stop HPC node manager daemon: {0}").format(pid))
             os.killpg(int(pid), 9)
-            os.remove(DaemonPidFilePath)
             cleanup_host_entries()
             hutil.do_exit(0, 'Disable', 'success', '0',
                           'HPC node manager daemon is disabled')
+        waagent.Log("Remove the daemon pid file: {0}".format(DaemonPidFilePath))
         os.remove(DaemonPidFilePath)
+    else:
+        waagent.Log("No daemon pid file discovered.")
 
     hutil.do_exit(0, 'Disable', 'success', '0',
-                  'HPC node manager daemon is not running')
+                  'HPC node manager daemon disabled')
 
 def update():
     hutil = parse_context('Update')

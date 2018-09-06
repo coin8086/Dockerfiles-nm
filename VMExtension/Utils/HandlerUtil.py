@@ -143,13 +143,15 @@ class HandlerUtility:
                 self.log('Config decoded correctly.')
         return config
 
-    def do_parse_context(self,operation):
-        _context = self.try_parse_context()
+    def do_parse_context(self,operation,logfile='extension.log'):
+        if not logfile:
+            logfile="extension.log"
+        _context = self.try_parse_context(logfile)
         if not _context:
             self.do_exit(1,operation,'error','1', operation + ' Failed')
         return _context
             
-    def try_parse_context(self):
+    def try_parse_context(self,logfile):
         self._context = HandlerContext(self._short_name)
         handler_env=None
         config=None
@@ -178,7 +180,7 @@ class HandlerUtility:
         self._context._version = str(handler_env['version'])
         self._context._config_dir=handler_env['handlerEnvironment']['configFolder']
         self._context._log_dir= handler_env['handlerEnvironment']['logFolder']
-        self._context._log_file= os.path.join(handler_env['handlerEnvironment']['logFolder'],'extension.log')
+        self._context._log_file= os.path.join(handler_env['handlerEnvironment']['logFolder'],logfile)
         self._change_log_file()
         self._context._status_dir=handler_env['handlerEnvironment']['statusFolder']
         self._context._heartbeat_file=handler_env['handlerEnvironment']['heartbeatFile']

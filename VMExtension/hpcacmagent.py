@@ -334,8 +334,8 @@ def _mount_cgroup():
 #            waagent.Run("firewall-cmd --permanent --zone=public --add-port=40000/tcp")
 #            waagent.Run("firewall-cmd --reload")
 
-def _subprocess(exec_path_args, work_dir, stdoutfile, stderrfile):
-    hutil = parse_context('Enable')
+def _subprocess(exec_path_args, work_dir, stdoutfile, stderrfile, logfile):
+    hutil = parse_context('Enable', logfile)
     while True:
         out = open(stdoutfile, 'a')
         err = open(stderrfile, 'a')
@@ -360,9 +360,9 @@ def _subprocess(exec_path_args, work_dir, stdoutfile, stderrfile):
         waagent.Log("Restart process {0} after {1} seconds".format(exec_path_args, RestartIntervalInSeconds))
         time.sleep(RestartIntervalInSeconds)
 
-def parse_context(operation):
+def parse_context(operation, logfile=None):
     hutil = Util.HandlerUtility(waagent.Log, waagent.Error, ExtensionShortName)
-    hutil.do_parse_context(operation)
+    hutil.do_parse_context(operation, logfile)
     return hutil
 
 def install():
@@ -524,7 +524,7 @@ def enable():
         hutil.do_exit(1, 'Enable','error','1', "Enable failed. {0} {1}".format(str(e), traceback.format_exc()))
 
 def daemon():
-    hutil = parse_context('Enable')
+    hutil = parse_context('Enable','daemon.log')
     try:
 #        public_settings = hutil._context._config['runtimeSettings'][0]['handlerSettings'].get('publicSettings')
 #        cluster_connstring = public_settings.get('ClusterConnectionString')
@@ -572,8 +572,8 @@ def daemon():
 
         exe_path = os.path.join(NMInstallRoot, "nodemanager")
 
-        threadnm = threading.Thread(target=_subprocess, args=(exe_path, NMInstallRoot, os.path.join(hutil.get_log_dir(), "nodemanager.txt"), os.path.join(hutil.get_log_dir(), "nodemanager.err")))
-        threadagent = threading.Thread(target=_subprocess, args=(os.path.join(AgentInstallRoot, "NodeAgent"), AgentInstallRoot, os.path.join(hutil.get_log_dir(), "nodeagent.txt"), os.path.join(hutil.get_log_dir(), "nodeagent.err")))
+        threadnm = threading.Thread(target=_subprocess, args=(exe_path, NMInstallRoot, os.path.join(hutil.get_log_dir(), "nodemanager.txt"), os.path.join(hutil.get_log_dir(), "nodemanager.err"), "nodemanager.log"))
+        threadagent = threading.Thread(target=_subprocess, args=(os.path.join(AgentInstallRoot, "NodeAgent"), AgentInstallRoot, os.path.join(hutil.get_log_dir(), "nodeagent.txt"), os.path.join(hutil.get_log_dir(), "nodeagent.err"), "nodeagent.log"))
         threadnm.start()
         threadagent.start()
         threadnm.join()

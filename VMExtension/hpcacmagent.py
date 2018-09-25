@@ -482,6 +482,7 @@ def enable():
         #If it does, return. Otherwise clear pid file
         waagent.Log("enable() called.")
         hutil = parse_context('Enable')
+        waagent.Log("passed context for enable.")
         if os.path.isfile(DaemonPidFilePath):
             pid = waagent.GetFileContents(DaemonPidFilePath)
             waagent.Log("Discovered daemon pid: {0}".format(pid))
@@ -517,15 +518,16 @@ def enable():
                         'HPC Linux node manager daemon is enabled')
             else:
                 waagent.Log("3 seconds later, failed, Daemon pid: None")
-                hutil.do_exit(1, 'Enable', 'error', '2',
+                hutil.do_exit(3, 'Enable', 'error', '3',
                         'Failed to launch HPC Linux node manager daemon')
     except Exception, e:
         waagent.Log("Failed to enable the extension with error: %s, stack trace: %s" %(str(e), traceback.format_exc()))
-        hutil.do_exit(1, 'Enable','error','1', "Enable failed. {0} {1}".format(str(e), traceback.format_exc()))
+        hutil.do_exit(2, 'Enable','error','2', "Enable failed. {0} {1}".format(str(e), traceback.format_exc()))
 
 def daemon():
     hutil = parse_context('Enable','daemon.log')
     try:
+        hutil.log("Started daemon")
 #        public_settings = hutil._context._config['runtimeSettings'][0]['handlerSettings'].get('publicSettings')
 #        cluster_connstring = public_settings.get('ClusterConnectionString')
 #        if not cluster_connstring:
@@ -574,14 +576,17 @@ def daemon():
 
         threadnm = threading.Thread(target=_subprocess, args=(exe_path, NMInstallRoot, os.path.join(hutil.get_log_dir(), "nodemanager.txt"), os.path.join(hutil.get_log_dir(), "nodemanager.err"), "nodemanager.log"))
         threadagent = threading.Thread(target=_subprocess, args=(os.path.join(AgentInstallRoot, "NodeAgent"), AgentInstallRoot, os.path.join(hutil.get_log_dir(), "nodeagent.txt"), os.path.join(hutil.get_log_dir(), "nodeagent.err"), "nodeagent.log"))
+        hutil.log("Starting threads")
         threadnm.start()
         threadagent.start()
+        hutil.log("Started threads")
         threadnm.join()
         threadagent.join()
+        hutil.log("Exited join threads")
         
     except Exception, e:
-        hutil.error("Failed to enable the extension with error: %s, stack trace: %s" %(str(e), traceback.format_exc()))
-        hutil.do_exit(1, 'Enable','error','1', 'Enable failed.')
+        hutil.error("Failed to start the daemon with error: %s, stack trace: %s" %(str(e), traceback.format_exc()))
+        hutil.do_exit(2, 'Enable','error','2', 'Enable failed.')
 
 def uninstall():
     # TODO where to kill the node manager

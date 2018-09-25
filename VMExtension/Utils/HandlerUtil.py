@@ -61,6 +61,7 @@ import imp
 import base64
 import json
 import time
+import logging
 from os.path import join
 from Utils.WAAgentUtil import waagent
 from waagent import LoggerInit
@@ -78,6 +79,7 @@ class HandlerUtility:
         self._log = log
         self._error = error
         self._short_name = short_name
+        logging.basicConfig(filename="/var/log/hpcacmagent.log", filemode='a', format='%(asctime)s,%(name)s %(levelname)s %(message)s', datefmt='%H:%M:%S', level=logging.DEBUG)
 
     def _get_log_prefix(self):
         return '[%s-%s]' %(self._context._name, self._context._version)
@@ -103,9 +105,11 @@ class HandlerUtility:
         return seq_no
 
     def log(self, message):
+        logging.getLogger(self._get_log_prefix()).info(message)
         self._log(self._get_log_prefix() + message)
 
     def error(self, message):
+        logging.getLogger(self._get_log_prefix()).error(message)
         self._error(self._get_log_prefix() + message)
 
     def _parse_config(self, ctxt):

@@ -338,27 +338,32 @@ def _subprocess(exec_path_args, work_dir, stdoutfile, stderrfile, logfile):
     hutil = parse_context('Enable', logfile)
     while True:
         try:
-            out = open(stdoutfile, 'a')
-            err = open(stderrfile, 'a')
-            infile = open(os.devnull, 'r')
-            child_process = subprocess.Popen(exec_path_args, stdin=infile, stdout=out, stderr=err, cwd=work_dir, shell=True)
-            if child_process.pid is None or child_process.pid < 1:
-                exit_msg = 'Failed to start process {0}'.format(exec_path_args)
-                hutil.do_status_report('Enable', 'error', 1, exit_msg)
-            else:
-                #Sleep 1 second to check if the process is still running
-                time.sleep(1)
-                if child_process.poll() is None:
-                    hutil.do_status_report('Enable', 'success', 0, "")
-                    hutil.log('process started {0}'.format(exec_path_args))
-                    exit_code = child_process.wait()
-                    exit_msg = "process exits: {0} {1}".format(exec_path_args, exit_code)
-                    hutil.do_status_report('Enable', 'warning', exit_code, exit_msg)
+            dirname = os.path.dirname(stdoutfile)
+            if not os.path.exists(dirname):
+                os.makedirs(dirname)
+            dirname = os.path.dirname(stderrfile)
+            if not os.path.exists(dirname):
+                os.makedirs(dirname)
+            with open(stdoutfile, 'a') as out, open(stderrfile, 'a') as err:
+                infile = open(os.devnull, 'r')
+                child_process = subprocess.Popen(exec_path_args, stdin=infile, stdout=out, stderr=err, cwd=work_dir, shell=True)
+                if child_process.pid is None or child_process.pid < 1:
+                    exit_msg = 'Failed to start process {0}'.format(exec_path_args)
+                    hutil.do_status_report('Enable', 'error', 1, exit_msg)
                 else:
-                    exit_msg = "{0} process crashes: {1}".format(exec_path_args, child_process.returncode)
-                    hutil.do_status_report('Enable', 'error', child_process.returncode, exit_msg)
-            hutil.log(exit_msg)
-            time.sleep(RestartIntervalInSeconds)
+                    #Sleep 1 second to check if the process is still running
+                    time.sleep(1)
+                    if child_process.poll() is None:
+                        hutil.do_status_report('Enable', 'success', 0, "")
+                        hutil.log('process started {0}'.format(exec_path_args))
+                        exit_code = child_process.wait()
+                        exit_msg = "process exits: {0} {1}".format(exec_path_args, exit_code)
+                        hutil.do_status_report('Enable', 'warning', exit_code, exit_msg)
+                    else:
+                        exit_msg = "{0} process crashes: {1}".format(exec_path_args, child_process.returncode)
+                        hutil.do_status_report('Enable', 'error', child_process.returncode, exit_msg)
+                hutil.log(exit_msg)
+                time.sleep(RestartIntervalInSeconds)
         except Exception, e:
             hutil.log("start process error {0}".format(e))
             hutil.do_exit(4, 'Start','error','4', '{0}'.format(e))

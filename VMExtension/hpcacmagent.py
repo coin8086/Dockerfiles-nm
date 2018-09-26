@@ -337,28 +337,32 @@ def _mount_cgroup():
 def _subprocess(exec_path_args, work_dir, stdoutfile, stderrfile, logfile):
     hutil = parse_context('Enable', logfile)
     while True:
-        out = open(stdoutfile, 'a')
-        err = open(stderrfile, 'a')
-        infile = open(os.devnull, 'r')
-        child_process = subprocess.Popen(exec_path_args, stdin=infile, stdout=out, stderr=err, cwd=work_dir, shell=True)
-        if child_process.pid is None or child_process.pid < 1:
-            exit_msg = 'Failed to start process {0}'.format(exec_path_args)
-            hutil.do_status_report('Enable', 'error', 1, exit_msg)
-        else:
-            #Sleep 1 second to check if the process is still running
-            time.sleep(1)
-            if child_process.poll() is None:
-                hutil.do_status_report('Enable', 'success', 0, "")
-                waagent.Log('process started {0}'.format(exec_path_args))
-                exit_code = child_process.wait()
-                exit_msg = "process exits: {0} {1}".format(exec_path_args, exit_code)
-                hutil.do_status_report('Enable', 'warning', exit_code, exit_msg)
+        try:
+            out = open(stdoutfile, 'a')
+            err = open(stderrfile, 'a')
+            infile = open(os.devnull, 'r')
+            child_process = subprocess.Popen(exec_path_args, stdin=infile, stdout=out, stderr=err, cwd=work_dir, shell=True)
+            if child_process.pid is None or child_process.pid < 1:
+                exit_msg = 'Failed to start process {0}'.format(exec_path_args)
+                hutil.do_status_report('Enable', 'error', 1, exit_msg)
             else:
-                exit_msg = "{0} process crashes: {1}".format(exec_path_args, child_process.returncode)
-                hutil.do_status_report('Enable', 'error', child_process.returncode, exit_msg)
-        waagent.Log(exit_msg)
-        waagent.Log("Restart process {0} after {1} seconds".format(exec_path_args, RestartIntervalInSeconds))
-        time.sleep(RestartIntervalInSeconds)
+                #Sleep 1 second to check if the process is still running
+                time.sleep(1)
+                if child_process.poll() is None:
+                    hutil.do_status_report('Enable', 'success', 0, "")
+                    hutil.log('process started {0}'.format(exec_path_args))
+                    exit_code = child_process.wait()
+                    exit_msg = "process exits: {0} {1}".format(exec_path_args, exit_code)
+                    hutil.do_status_report('Enable', 'warning', exit_code, exit_msg)
+                else:
+                    exit_msg = "{0} process crashes: {1}".format(exec_path_args, child_process.returncode)
+                    hutil.do_status_report('Enable', 'error', child_process.returncode, exit_msg)
+            hutil.log(exit_msg)
+            time.sleep(RestartIntervalInSeconds)
+        except Exception, e:
+            hutil.log("start process error {0}".format(e))
+            hutil.do_exit(4, 'Start','error','4', '{0}'.format(e))
+        hutil.log("Restart process {0} after {1} seconds".format(exec_path_args, RestartIntervalInSeconds))
 
 def parse_context(operation, logfile=None):
     hutil = Util.HandlerUtility(waagent.Log, waagent.Error, ExtensionShortName)
@@ -477,51 +481,50 @@ def install():
         hutil.do_exit(1, 'Install','error','1', '{0}'.format(e))
 
 def enable():
+    hutil = parse_context('Enable')
     try:
         #Check whether monitor process is running.
         #If it does, return. Otherwise clear pid file
-        waagent.Log("enable() called.")
-        hutil = parse_context('Enable')
-        waagent.Log("passed context for enable.")
+        hutil.log("enable() called.")
         if os.path.isfile(DaemonPidFilePath):
             pid = waagent.GetFileContents(DaemonPidFilePath)
-            waagent.Log("Discovered daemon pid: {0}".format(pid))
+            hutil.log("Discovered daemon pid: {0}".format(pid))
             if os.path.isdir(os.path.join("/proc", pid)) and _is_nodemanager_daemon(pid):
                 if hutil.is_seq_smaller():
-                    waagent.Log("Sequence is smaller skip killing")
+                    hutil.log("Sequence is smaller skip killing")
                     hutil.do_exit(0, 'Enable', 'success', '0', 
                                 'HPC Linux node manager daemon is already running')
                 else:
-                    waagent.Log("Stop old daemon: {0}".format(pid))
+                    hutil.log("Stop old daemon: {0}".format(pid))
                     os.killpg(int(pid), 9)
-            waagent.Log("Remove the daemon pid file: {0}".format(DaemonPidFilePath))
+            hutil.log("Remove the daemon pid file: {0}".format(DaemonPidFilePath))
             os.remove(DaemonPidFilePath)
 
         args = [os.path.join(os.getcwd(), __file__), "daemon"]
         devnull = open(os.devnull, 'w')
-        waagent.Log("Starting daemon process")
+        hutil.log("Starting daemon process")
         child = subprocess.Popen(args, stdout=devnull, stderr=devnull, preexec_fn=os.setsid)
         if child.pid is None or child.pid < 1:
-            waagent.Log("failed to start the daemon process")
+            hutil.log("failed to start the daemon process")
             hutil.do_exit(1, 'Enable', 'error', '1',
                         'Failed to launch HPC Linux node manager daemon')
         else:
-            waagent.Log("started the daemon process, save seq")
+            hutil.log("started the daemon process, save seq")
             hutil.save_seq()
-            waagent.Log("started the daemon process, save pid {0}".format(child.pid))
+            hutil.log("started the daemon process, save pid {0}".format(child.pid))
             waagent.SetFileContents(DaemonPidFilePath, str(child.pid))
             #Sleep 3 seconds to check if the process is still running
             time.sleep(3)
             if child.poll() is None:
-                waagent.Log("3 seconds later, success, Daemon pid: {0}".format(child.pid))
+                hutil.log("3 seconds later, success, Daemon pid: {0}".format(child.pid))
                 hutil.do_exit(0, 'Enable', 'success', '0',
                         'HPC Linux node manager daemon is enabled')
             else:
-                waagent.Log("3 seconds later, failed, Daemon pid: None")
+                hutil.log("3 seconds later, failed, Daemon pid: None")
                 hutil.do_exit(3, 'Enable', 'error', '3',
                         'Failed to launch HPC Linux node manager daemon')
     except Exception, e:
-        waagent.Log("Failed to enable the extension with error: %s, stack trace: %s" %(str(e), traceback.format_exc()))
+        hutil.log("Failed to enable the extension with error: %s, stack trace: %s" %(str(e), traceback.format_exc()))
         hutil.do_exit(2, 'Enable','error','2', "Enable failed. {0} {1}".format(str(e), traceback.format_exc()))
 
 def daemon():

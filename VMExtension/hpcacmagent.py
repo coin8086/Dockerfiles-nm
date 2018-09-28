@@ -151,7 +151,7 @@ def _install_psutils():
         waagent.Log("Error installing psutil")
 
 def _install_pip():
-    ec = waagent.Run("curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py", chk_err=False)
+    ec = waagent.Run("curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py --tlsv1.2", chk_err=False)
     if ec != 0:
         waagent.Log("get-pip.py was not downloaded, {0}".format(ec))
         raise Exception("failed to install package python-pip:{0}".format(ec))

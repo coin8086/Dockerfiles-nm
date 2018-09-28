@@ -179,7 +179,10 @@ def _install_python_devel():
     _check_and_install_package("python-devel")
 
 def _install_libunwind():
-    _check_and_install_package("libunwind")
+    if DistroName == "ubuntu":
+        _check_and_install_package("libunwind8-dev")
+    else:
+        _check_and_install_package("libunwind")
 
 def _install_sysstat():
     _check_and_install_package("sysstat", "iostat")

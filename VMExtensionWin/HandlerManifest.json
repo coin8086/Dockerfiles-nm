@@ -1,0 +1,14 @@
+[{
+  "name": "HPCACMAgentWin",
+  "version": 1.0,
+  "handlerManifest": {
+    "installCommand": "handler.ps1 install",
+    "uninstallCommand": "handler.ps1 uninstall",
+    "updateCommand": "handler.ps1 update",
+    "enableCommand": "handler.ps1 enable",
+    "disableCommand": "handler.ps1 disable",
+    "rebootAfterInstall": false,
+    "reportHeartbeat": false,
+    "updateMode": "UpdateWithInstall"
+  }
+}]

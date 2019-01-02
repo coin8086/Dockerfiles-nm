@@ -9,9 +9,9 @@ RUN make release
 
 FROM microsoft/aspnetcore-build:2.0 AS hpcacmbuild
 WORKDIR /src
-ADD https://api.github.com/repos/EvanCui/hpc-acm/compare/master...HEAD /dev/null
-RUN git clone https://github.com/EvanCui/hpc-acm.git
-WORKDIR /src/hpc-acm/src/Services/NodeAgent
+ADD https://api.github.com/repos/Azure/hpcpack-acm/compare/master...HEAD /dev/null
+RUN git clone https://github.com/Azure/hpcpack-acm.git
+WORKDIR /src/hpcpack-acm/src/Services/NodeAgent
 RUN dotnet publish -c Release -r linux-x64 --self-contained -o /app/NodeAgent
 
 FROM evancui/nodemanager:nmexecbase AS final

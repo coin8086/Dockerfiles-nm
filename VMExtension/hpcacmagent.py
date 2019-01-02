@@ -33,6 +33,7 @@ import struct
 import array
 import fcntl
 import threading
+import errno
 
 from Utils.WAAgentUtil import waagent
 import Utils.HandlerUtil as Util
@@ -297,8 +298,9 @@ def _update_dns_record(domain_fqdn):
         try:
             s.connect((domain_fqdn, 53))
             break
-        except Exception, e:
+        except Exception as e:
             waagent.Log('Failed to connect to {0}:53: {1}'.format(domain_fqdn, e))
+
     ipaddr = s.getsockname()[0]
     host_fqdn = "{0}.{1}".format(socket.gethostname().split('.')[0], domain_fqdn)
     dns_cmd = 'echo -e "server {0}\nzone {0}\nupdate delete {1}\nupdate add {1} 864000 A {2}\nsend\n" | nsupdate -v'.format(domain_fqdn, host_fqdn, ipaddr)
@@ -337,16 +339,23 @@ def _mount_cgroup():
 #            waagent.Run("firewall-cmd --permanent --zone=public --add-port=40000/tcp")
 #            waagent.Run("firewall-cmd --reload")
 
+def _try_makedirs(dirname):
+    try:
+        os.makedirs(dirname)
+    except OSError as e:
+        if e.errno != errno.EEXIST:
+            raise
+
+
 def _subprocess(exec_path_args, work_dir, stdoutfile, stderrfile, logfile):
     hutil = parse_context('Enable', logfile)
     while True:
         try:
             dirname = os.path.dirname(stdoutfile)
-            if not os.path.exists(dirname):
-                os.makedirs(dirname)
+            _try_makedirs(dirname)
             dirname = os.path.dirname(stderrfile)
-            if not os.path.exists(dirname):
-                os.makedirs(dirname)
+            _try_makedirs(dirname)
+
             with open(stdoutfile, 'a') as out, open(stderrfile, 'a') as err:
                 infile = open(os.devnull, 'r')
                 child_process = subprocess.Popen(exec_path_args, stdin=infile, stdout=out, stderr=err, cwd=work_dir, shell=True)
@@ -367,7 +376,7 @@ def _subprocess(exec_path_args, work_dir, stdoutfile, stderrfile, logfile):
                         hutil.do_status_report('Enable', 'error', child_process.returncode, exit_msg)
                 hutil.log(exit_msg)
                 time.sleep(RestartIntervalInSeconds)
-        except Exception, e:
+        except Exception as e:
             hutil.log("start process error {0}".format(e))
             hutil.do_exit(4, 'Start','error','4', '{0}'.format(e))
         hutil.log("Restart process {0} after {1} seconds".format(exec_path_args, RestartIntervalInSeconds))
@@ -484,7 +493,7 @@ def install():
 #        shutil.copy2(configfile, backup_configfile)
 #        config_firewall_rules()
         hutil.do_exit(0, 'Install', 'success', '0', 'Install Succeeded.')
-    except Exception, e:
+    except Exception as e:
         waagent.Log("Install error {0}.".format(e))
         hutil.do_exit(1, 'Install','error','1', '{0}'.format(e))
 
@@ -531,7 +540,7 @@ def enable():
                 hutil.log("3 seconds later, failed, Daemon pid: None")
                 hutil.do_exit(3, 'Enable', 'error', '3',
                         'Failed to launch HPC Linux node manager daemon')
-    except Exception, e:
+    except Exception as e:
         hutil.log("Failed to enable the extension with error: %s, stack trace: %s" %(str(e), traceback.format_exc()))
         hutil.do_exit(2, 'Enable','error','2', "Enable failed. {0} {1}".format(str(e), traceback.format_exc()))
 
@@ -595,7 +604,7 @@ def daemon():
         threadagent.join()
         hutil.log("Exited join threads")
         
-    except Exception, e:
+    except Exception as e:
         hutil.error("Failed to start the daemon with error: %s, stack trace: %s" %(str(e), traceback.format_exc()))
         hutil.do_exit(2, 'Enable','error','2', 'Enable failed.')
 

@@ -11,7 +11,7 @@ if ($unregister.IsPresent)
         echo $prever
 
         echo "Make the old extension $prever internal"
-        .\UpdateHPCAcmVMExtension.ps1 -MediaLink https://evanc.blob.core.windows.net/linuxnm/HpcAcmAgent-$prever.zip -Version $prever -Internal -Force
+        .\UpdateHPCAcmVMExtension.ps1 -MediaLink https://evanc.blob.core.windows.net/linuxnm/HpcAcmAgentWin-$prever.zip -Version $prever -Internal -Force
 
         sleep 10
 

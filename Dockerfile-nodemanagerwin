@@ -1,0 +1,11 @@
+FROM microsoft/aspnetcore-build:2.0 AS hpcacmbuild
+WORKDIR /src
+ADD https://api.github.com/repos/Azure/hpcpack-acm/compare/master...HEAD /dev/null
+RUN git clone https://github.com/Azure/hpcpack-acm.git
+WORKDIR /src/hpcpack-acm/src/Services/NodeAgent
+RUN dotnet publish -c Release -r win-x64 --self-contained -o /app/NodeAgent
+
+FROM evancui/nodemanager:nmexecbase AS final
+COPY --from=hpcacmbuild /app/NodeAgent/ /app/winagent/
+COPY ./VMExtensionWin/ /app/
+COPY ./publishwin/ /publishwin/

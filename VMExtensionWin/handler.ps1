@@ -48,6 +48,7 @@ switch ($action)
     "disable" {
         Log "Stopping HpcNodeAgent"
         sc.exe stop HpcNodeAgent
+        Stop-Process -Name NodeAgent -Force
     }
     "update" {
 

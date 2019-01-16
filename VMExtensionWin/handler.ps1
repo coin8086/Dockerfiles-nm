@@ -21,6 +21,7 @@ Log "====> Doing action $action"
 switch ($action)
 {
     "install" {
+        .\handler.ps1 "uninstall"
         Log "Installing msi"
         msiexec.exe /i HpcNodeAgent_x64.msi ADDLOCAL=NodeAgent CCPDIR=`"$env:ProgramFiles\Microsoft HPC Pack ACM\`" DATADIR=`"$env:ProgramFiles\Microsoft HPC Pack ACM\Data\`"
 

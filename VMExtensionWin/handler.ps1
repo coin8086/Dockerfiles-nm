@@ -32,7 +32,7 @@ switch ($action)
         $config | ConvertTo-Json | Set-Content $configPath
 
         Log "Installing msi"
-        msiexec.exe /i "$PSScriptRoot\HpcNodeAgent_x64.msi" ADDLOCAL=NodeAgent CCPDIR=`"$env:ProgramFiles\Microsoft HPC Pack ACM\`" DATADIR=`"$env:ProgramFiles\Microsoft HPC Pack ACM\Data\`"
+        Start-Process -FilePath "msiexec.exe" -ArgumentList "/i `"$PSScriptRoot\HpcNodeAgent_x64.msi`" ADDLOCAL=NodeAgent CCPDIR=`"$env:ProgramFiles\Microsoft HPC Pack ACM\`" DATADIR=`"$env:ProgramFiles\Microsoft HPC Pack ACM\Data\`"" -Wait
     }
     "uninstall" {
         & $PSScriptRoot\handler.ps1 "disable"
@@ -45,11 +45,11 @@ switch ($action)
     }
     "enable" {
         Log "Starting HpcNodeAgent"
-        sc.exe start HpcNodeAgent
+        Start-Service -Name HpcNodeAgent
     }
     "disable" {
         Log "Stopping HpcNodeAgent"
-        sc.exe stop HpcNodeAgent
+        Stop-Service -Name HpcNodeAgent -Force -ErrorAction SilentlyContinue
         Stop-Process -Name NodeAgent -Force -ErrorAction SilentlyContinue
     }
     "update" {

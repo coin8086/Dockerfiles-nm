@@ -31,6 +31,8 @@ switch ($action)
         $config.NodeRegisterWorkerOptions | Add-Member -Name "Enabled" -Value "True" -MemberType NoteProperty
         $config | ConvertTo-Json | Set-Content $configPath
 
+        Start-Process -FilePath "vcredist_x64.exe" -ArgumentList "/install /quiet /norestart /log vcredist.log" -Wait
+
         Log "Installing msi"
         Start-Process -FilePath "msiexec.exe" -ArgumentList "/i `"$PSScriptRoot\HpcNodeAgent_x64.msi`" ADDLOCAL=NodeAgent CCPDIR=`"$env:ProgramFiles\Microsoft HPC Pack ACM\`" DATADIR=`"$env:ProgramFiles\Microsoft HPC Pack ACM\Data\`"" -Wait
     }

@@ -2,11 +2,11 @@
   "name": "HPCACMAgentWin",
   "version": 1.0,
   "handlerManifest": {
-    "installCommand": "powershell handler.ps1 install",
-    "uninstallCommand": "powershell handler.ps1 uninstall",
-    "updateCommand": "powershell handler.ps1 update",
-    "enableCommand": "powershell handler.ps1 enable",
-    "disableCommand": "powershell handler.ps1 disable",
+    "installCommand": "start.cmd install",
+    "uninstallCommand": "start.cmd uninstall",
+    "updateCommand": "start.cmd update",
+    "enableCommand": "start.cmd enable",
+    "disableCommand": "start.cmd disable",
     "rebootAfterInstall": false,
     "reportHeartbeat": false,
     "updateMode": "UpdateWithInstall"

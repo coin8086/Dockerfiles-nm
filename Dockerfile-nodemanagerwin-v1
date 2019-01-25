@@ -2,6 +2,7 @@ FROM microsoft/aspnetcore-build:2.0 AS hpcacmbuild
 WORKDIR /src
 ADD https://api.github.com/repos/Azure/hpcpack-acm/compare/release/v1...HEAD /dev/null
 RUN git clone https://github.com/Azure/hpcpack-acm.git
+WORKDIR /src/hpcpack-acm
 RUN git checkout release/v1
 WORKDIR /src/hpcpack-acm/src/Services/NodeAgent
 RUN dotnet publish -c Release -r win-x64 --self-contained -o /app/NodeAgent

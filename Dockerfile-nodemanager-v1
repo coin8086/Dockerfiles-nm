@@ -4,8 +4,8 @@ ADD https://api.github.com/repos/coolmay/whpc-linux-communicator/compare/master.
 RUN git clone https://github.com/coolmay/whpc-linux-communicator.git
 WORKDIR /src/whpc-linux-communicator/nodemanager
 ENV TERM=xterm
-RUN make release -l $(nproc) -j $(nproc)
-RUN make release
+RUN make -f Makefile-Acm release -l $(nproc) -j $(nproc)
+RUN make -f Makefile-Acm release
 
 FROM microsoft/aspnetcore-build:2.0 AS hpcacmbuild
 WORKDIR /src
@@ -17,7 +17,7 @@ WORKDIR /src/hpcpack-acm/src/Services/NodeAgent
 RUN dotnet publish -c Release -r linux-x64 --self-contained -o /app/NodeAgent
 
 FROM evancui/nodemanager:nmexecbase AS final
-COPY --from=nodemgrrelease /src/whpc-linux-communicator/nodemanager/bin/release/ /opt/hpcnodemanager
+COPY --from=nodemgrrelease /src/whpc-linux-communicator/nodemanager/bin/release/ /opt/acmnodemanager
 COPY --from=hpcacmbuild /app/NodeAgent/ /app/NodeAgent/
 COPY ./VMExtension/ /app/
 COPY ./publish/ /publish/

@@ -41,7 +41,7 @@ import Utils.HandlerUtil as Util
 #Define global variables
 ExtensionShortName = 'HPCACMAgent'
 DaemonPidFilePath = '/var/run/hpcacmdaemon.pid'
-NMInstallRoot = '/opt/hpcnodemanager'
+NMInstallRoot = '/opt/acmnodemanager'
 AgentInstallRoot = '/opt/NodeAgent'
 DistroName = None
 DistroVersion = None
@@ -409,7 +409,7 @@ def install():
         waagent.Log("Testing {0}".format(logDir))
         if not os.path.isdir(logDir):
             os.makedirs(logDir)
-        srcDir = os.path.join(os.getcwd(), "hpcnodemanager")
+        srcDir = os.path.join(os.getcwd(), "acmnodemanager")
         waagent.RunGetOutput("chmod +x {0}/*".format(srcDir))
         waagent.RunGetOutput("chmod +x {0}/lib/*".format(srcDir))
         

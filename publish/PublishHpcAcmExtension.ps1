@@ -32,14 +32,47 @@ sleep 10
 echo "Waiting replicate"
 .\WaitForHpcAcmExtensionReplicate.ps1
 
-echo "Make the new extension $version public on South Central US"
-.\UpdateHPCAcmVMExtension.ps1 -MediaLink https://evanc.blob.core.windows.net/linuxnm/HpcAcmAgent-$version.zip -Version $version -Region ("South Central US") -Force
-sleep 5
-echo "Make the new extension $version public on South Central US and East Asia"
+while ($true)
+{
+        try
+        {
+                echo "Make the new extension $version public on South Central US"
+                .\UpdateHPCAcmVMExtension.ps1 -MediaLink https://evanc.blob.core.windows.net/linuxnm/HpcAcmAgent-$version.zip -Version $version -Region ("South Central US") -Force
+                break
+        }
+        catch
+        {
+                sleep 5
+        }
+}
+
+while ($true)
+{
+        try
+        {
+echo "Make the new extension $version public on South Central US, and East Asia"
 .\UpdateHPCAcmVMExtension.ps1 -MediaLink https://evanc.blob.core.windows.net/linuxnm/HpcAcmAgent-$version.zip -Version $version -Region ("South Central US", "East Asia") -Force
-sleep 5
-echo "Make the new extension $version public on all regions"
-.\UpdateHPCAcmVMExtension.ps1 -MediaLink https://evanc.blob.core.windows.net/linuxnm/HpcAcmAgent-$version.zip -Version $version -Force
+                break
+        }
+        catch
+        {
+                sleep 5
+        }
+}
+
+while ($true)
+{
+        try
+        {
+                echo "Make the new extension $version public on All regions"
+                .\UpdateHPCAcmVMExtension.ps1 -MediaLink https://evanc.blob.core.windows.net/linuxnm/HpcAcmAgent-$version.zip -Version $version -Force
+                break
+        }
+        catch
+        {
+                sleep 5
+        }
+}
 
 sleep 10
 

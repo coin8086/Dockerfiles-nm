@@ -11,6 +11,10 @@ Param
     [Switch] $Force
 ) 
 
+echo "Make the old extension $Version internal"
+.\UpdateHPCAcmVMExtension.ps1 -Version $Version -Internal -Force
+sleep 10
+
 if($MoonCake.IsPresent)
 {
     $uri = "https://management.core.chinacloudapi.cn/5a08dd6d-4a18-4f07-bebb-aeaf6167e4d8/services/extensions/Microsoft.HpcPack/HpcAcmAgent/$Version"

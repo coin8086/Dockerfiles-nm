@@ -3,9 +3,6 @@ Param
 (
     # The file path of the configuration file for deploying the HPC Pack cluster in Microsoft Azure, please refer to the the file "Manual.rtf" which can be found in the same folder of this script.
     [Parameter(Mandatory=$true)]
-    [String] $MediaLink,
-
-    [Parameter(Mandatory=$true)]
     [String] $Version,
 
     [Parameter(Mandatory=$false, ParameterSetName="Internal")]
@@ -20,6 +17,8 @@ Param
     [Parameter(Mandatory=$false)]
     [Switch] $Force
 )
+
+$MediaLink = "https://evanc.blob.core.windows.net/linuxnm/HpcAcmAgent-$Version.zip"
 
 $bodyxml = @"
 <?xml version="1.0" encoding="utf-8"?>

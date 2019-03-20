@@ -1,0 +1,300 @@
+
+
+ProviderNameSpace          : Microsoft.HpcPack
+Type                       : HPCAcmAgent10
+Version                    : 1.0.0.1
+Label                      : The HPC Azure Cluster Management node agent
+Description                : Linux node agent for Microsoft HPC Pack 2016 Update 1 is a VM extension used to install and configure HPC Pack node agent on a Linux virtual machine. This is required for a Linux virtual machine to 
+                             join an HPC Pack 2016 Update 1 cluster and managed by HPC Pack 2016 Update 1 head node for job scheduling and monitoring. 
+HostingResources           : VmRole
+PublicConfigurationSchema  : 
+PrivateConfigurationSchema : 
+BlockRoleUponFailure       : false
+ReplicationCompleted       : true
+Eula                       : http://go.microsoft.com/fwlink/?LinkID=507756
+PrivacyUri                 : http://go.microsoft.com/fwlink/?LinkID=507755
+HomepageUri                : http://www.microsoft.com/hpc
+IsJsonExtension            : true
+IsInternalExtension        : true
+SupportedOS                : Linux
+CompanyName                : Microsoft
+PublishedDate              : 2018-06-08T09:51:08.8502697Z
+Regions                    : 
+
+ProviderNameSpace          : Microsoft.HpcPack
+Type                       : HPCAcmAgent
+Version                    : 1.0.25.0
+Label                      : The HPC Azure Cluster Management node agent
+Description                : The node agent for HPC Azure Cluster Management is a VM extension used to install and configure a HPC cluster to be managed by the HPC ACM service.
+HostingResources           : VmRole
+PublicConfigurationSchema  : 
+PrivateConfigurationSchema : 
+BlockRoleUponFailure       : false
+ReplicationCompleted       : true
+Eula                       : http://go.microsoft.com/fwlink/?LinkID=507756
+PrivacyUri                 : http://go.microsoft.com/fwlink/?LinkID=507755
+HomepageUri                : http://www.microsoft.com/hpc
+IsJsonExtension            : true
+IsInternalExtension        : true
+SupportedOS                : Linux
+CompanyName                : Microsoft
+PublishedDate              : 2018-09-19T04:54:24.0031052Z
+Regions                    : 
+
+ProviderNameSpace          : Microsoft.HpcPack
+Type                       : HPCAcmAgent
+Version                    : 1.0.46.0
+Label                      : The HPC Azure Cluster Management node agent
+Description                : The node agent for HPC Azure Cluster Management is a VM extension used to install and configure a HPC cluster to be managed by the HPC ACM service.
+HostingResources           : VmRole
+PublicConfigurationSchema  : 
+PrivateConfigurationSchema : 
+BlockRoleUponFailure       : false
+ReplicationCompleted       : true
+Eula                       : http://go.microsoft.com/fwlink/?LinkID=507756
+PrivacyUri                 : http://go.microsoft.com/fwlink/?LinkID=507755
+HomepageUri                : http://www.microsoft.com/hpc
+IsJsonExtension            : true
+SupportedOS                : Linux
+CompanyName                : Microsoft
+PublishedDate              : 2019-01-29T08:56:07.2903137Z
+Regions                    : 
+
+ProviderNameSpace          : Microsoft.HpcPack
+Type                       : HPCAcmAgent
+Version                    : 1.0.47.0
+Label                      : The HPC Azure Cluster Management node agent
+Description                : The node agent for HPC Azure Cluster Management is a VM extension used to install and configure a HPC cluster to be managed by the HPC ACM service.
+HostingResources           : VmRole
+PublicConfigurationSchema  : 
+PrivateConfigurationSchema : 
+BlockRoleUponFailure       : false
+ReplicationCompleted       : true
+Eula                       : http://go.microsoft.com/fwlink/?LinkID=507756
+PrivacyUri                 : http://go.microsoft.com/fwlink/?LinkID=507755
+HomepageUri                : http://www.microsoft.com/hpc
+IsJsonExtension            : true
+SupportedOS                : Linux
+CompanyName                : Microsoft
+PublishedDate              : 2019-02-02T09:01:43.0535468Z
+Regions                    : 
+
+ProviderNameSpace          : Microsoft.HpcPack
+Type                       : HPCAcmAgentWin
+Version                    : 1.0.17.0
+Label                      : The HPC Azure Cluster Management node agent
+Description                : The node agent for HPC Azure Cluster Management is a VM extension used to install and configure a HPC cluster to be managed by the HPC ACM service.
+HostingResources           : VmRole
+PublicConfigurationSchema  : 
+PrivateConfigurationSchema : 
+BlockRoleUponFailure       : false
+ReplicationCompleted       : true
+Eula                       : http://go.microsoft.com/fwlink/?LinkID=507756
+PrivacyUri                 : http://go.microsoft.com/fwlink/?LinkID=507755
+HomepageUri                : http://www.microsoft.com/hpc
+IsJsonExtension            : true
+SupportedOS                : Windows
+CompanyName                : Microsoft
+PublishedDate              : 2019-01-28T08:55:59.9047221Z
+Regions                    : 
+
+ProviderNameSpace          : Microsoft.HpcPack
+Type                       : HPCAcmAgentWin
+Version                    : 1.0.18.0
+Label                      : The HPC Azure Cluster Management node agent
+Description                : The node agent for HPC Azure Cluster Management is a VM extension used to install and configure a HPC cluster to be managed by the HPC ACM service.
+HostingResources           : VmRole
+PublicConfigurationSchema  : 
+PrivateConfigurationSchema : 
+BlockRoleUponFailure       : false
+ReplicationCompleted       : true
+Eula                       : http://go.microsoft.com/fwlink/?LinkID=507756
+PrivacyUri                 : http://go.microsoft.com/fwlink/?LinkID=507755
+HomepageUri                : http://www.microsoft.com/hpc
+IsJsonExtension            : true
+SupportedOS                : Windows
+CompanyName                : Microsoft
+PublishedDate              : 2019-02-02T09:06:55.1137529Z
+Regions                    : 
+
+ProviderNameSpace          : Microsoft.HpcPack
+Type                       : HPCAcmAgentWin
+Version                    : 1.0.2.0
+Label                      : The HPC Azure Cluster Management node agent
+Description                : The node agent for HPC Azure Cluster Management is a VM extension used to install and configure a HPC cluster to be managed by the HPC ACM service.
+HostingResources           : VmRole
+PublicConfigurationSchema  : 
+PrivateConfigurationSchema : 
+BlockRoleUponFailure       : false
+ReplicationCompleted       : true
+Eula                       : http://go.microsoft.com/fwlink/?LinkID=507756
+PrivacyUri                 : http://go.microsoft.com/fwlink/?LinkID=507755
+HomepageUri                : http://www.microsoft.com/hpc
+IsJsonExtension            : true
+IsInternalExtension        : true
+SupportedOS                : Windows
+CompanyName                : Microsoft
+PublishedDate              : 2019-01-02T08:06:41.8899548Z
+Regions                    : 
+
+ProviderNameSpace          : Microsoft.HpcPack
+Type                       : LinuxNodeAgent2016
+Version                    : 2.1.6.0
+Label                      : Microsoft HPC Pack Linux Node Agent 2016
+Description                : Microsoft HPC Pack Linux node agent 2016 is a VM extension used to install and configure HPC Pack 2016 node agent on a Linux virtual machine. This is required for a Linux virtual machine to join an 
+                             HPC Pack 2016 cluster and managed by HPC Pack 2016 head node for job scheduling and monitoring. 
+HostingResources           : VmRole
+PublicConfigurationSchema  : 
+PrivateConfigurationSchema : 
+BlockRoleUponFailure       : false
+ReplicationCompleted       : true
+Eula                       : http://go.microsoft.com/fwlink/?LinkID=507756
+PrivacyUri                 : http://go.microsoft.com/fwlink/?LinkID=507755
+HomepageUri                : http://www.microsoft.com/hpc
+IsJsonExtension            : true
+SupportedOS                : Linux
+CompanyName                : Microsoft
+PublishedDate              : 2016-12-06T03:08:26.2022676Z
+Regions                    : 
+
+ProviderNameSpace          : Microsoft.HpcPack
+Type                       : LinuxNodeAgent2016U1
+Version                    : 2.3.6.0
+Label                      : Linux node agent for Microsoft HPC Pack 2016 Update 1
+Description                : Linux node agent for Microsoft HPC Pack 2016 Update 1 is a VM extension used to install and configure HPC Pack node agent on a Linux virtual machine. This is required for a Linux virtual machine to 
+                             join an HPC Pack 2016 Update 1 cluster and managed by HPC Pack 2016 Update 1 head node for job scheduling and monitoring. 
+HostingResources           : VmRole
+PublicConfigurationSchema  : 
+PrivateConfigurationSchema : 
+BlockRoleUponFailure       : false
+ReplicationCompleted       : true
+Eula                       : http://go.microsoft.com/fwlink/?LinkID=507756
+PrivacyUri                 : http://go.microsoft.com/fwlink/?LinkID=507755
+HomepageUri                : http://www.microsoft.com/hpc
+IsJsonExtension            : true
+SupportedOS                : Linux
+CompanyName                : Microsoft
+PublishedDate              : 2018-09-19T05:32:10.0826885Z
+Regions                    : 
+
+ProviderNameSpace          : Microsoft.HpcPack
+Type                       : LinuxNodeAgent2016U1
+Version                    : 2.3.7.1
+Label                      : Linux node agent for Microsoft HPC Pack 2016 Update 1
+Description                : Linux node agent for Microsoft HPC Pack 2016 Update 1 is a VM extension used to install and configure HPC Pack node agent on a Linux virtual machine. This is required for a Linux virtual machine to 
+                             join an HPC Pack 2016 Update 1 cluster and managed by HPC Pack 2016 Update 1 head node for job scheduling and monitoring. 
+HostingResources           : VmRole
+PublicConfigurationSchema  : 
+PrivateConfigurationSchema : 
+BlockRoleUponFailure       : false
+ReplicationCompleted       : true
+Eula                       : http://go.microsoft.com/fwlink/?LinkID=507756
+PrivacyUri                 : http://go.microsoft.com/fwlink/?LinkID=507755
+HomepageUri                : http://www.microsoft.com/hpc
+IsJsonExtension            : true
+SupportedOS                : Linux
+CompanyName                : Microsoft
+PublishedDate              : 2019-01-11T07:00:37.7031988Z
+Regions                    : 
+
+ProviderNameSpace          : Microsoft.HpcPack
+Type                       : LinuxNodeAgent
+Version                    : 1.5.1.0
+Label                      : Microsoft HPC Pack Linux Node Agent
+Description                : Microsoft HPC Pack Linux node agent is an internal VM extension used to install necessary HPC Pack Linux agent and configure the Linux VMs. This is required for a Linux VM to join the HPC Pack 
+                             cluster and managed by HPC Pack head node for job scheduling and monitoring. 
+HostingResources           : VmRole
+PublicConfigurationSchema  : 
+PrivateConfigurationSchema : 
+BlockRoleUponFailure       : false
+ReplicationCompleted       : true
+Eula                       : http://go.microsoft.com/fwlink/?LinkID=507756
+PrivacyUri                 : http://go.microsoft.com/fwlink/?LinkID=507755
+HomepageUri                : http://www.microsoft.com/hpc
+IsJsonExtension            : true
+SupportedOS                : Linux
+CompanyName                : Microsoft
+PublishedDate              : 2015-07-10T08:21:18.3833288Z
+Regions                    : 
+
+ProviderNameSpace          : Microsoft.HpcPack
+Type                       : LinuxNodeAgent
+Version                    : 1.6.18.3
+Label                      : Microsoft HPC Pack Linux Node Agent
+Description                : Microsoft HPC Pack Linux node agent is an internal VM extension used to install necessary HPC Pack Linux agent and configure the Linux VMs. This is required for a Linux VM to join the HPC Pack 
+                             cluster and managed by HPC Pack head node for job scheduling and monitoring. 
+HostingResources           : VmRole
+PublicConfigurationSchema  : 
+PrivateConfigurationSchema : 
+BlockRoleUponFailure       : false
+ReplicationCompleted       : true
+Eula                       : http://go.microsoft.com/fwlink/?LinkID=507756
+PrivacyUri                 : http://go.microsoft.com/fwlink/?LinkID=507755
+HomepageUri                : http://www.microsoft.com/hpc
+IsJsonExtension            : true
+SupportedOS                : Linux
+CompanyName                : Microsoft
+PublishedDate              : 2016-02-22T07:27:59.327806Z
+Regions                    : 
+
+ProviderNameSpace          : Microsoft.HpcPack
+Type                       : LinuxNodeAgent
+Version                    : 1.7.11.2
+Label                      : Microsoft HPC Pack Linux Node Agent
+Description                : Microsoft HPC Pack Linux node agent is an internal VM extension used to install necessary HPC Pack Linux agent and configure the Linux VMs. This is required for a Linux VM to join the HPC Pack 
+                             cluster and managed by HPC Pack head node for job scheduling and monitoring. 
+HostingResources           : VmRole
+PublicConfigurationSchema  : 
+PrivateConfigurationSchema : 
+BlockRoleUponFailure       : false
+ReplicationCompleted       : true
+Eula                       : http://go.microsoft.com/fwlink/?LinkID=507756
+PrivacyUri                 : http://go.microsoft.com/fwlink/?LinkID=507755
+HomepageUri                : http://www.microsoft.com/hpc
+IsJsonExtension            : true
+SupportedOS                : Linux
+CompanyName                : Microsoft
+PublishedDate              : 2016-08-09T04:31:29.2664206Z
+Regions                    : 
+
+ProviderNameSpace          : Microsoft.HpcPack
+Type                       : LinuxNodeAgent
+Version                    : 2.1.5.0
+Label                      : Microsoft HPC Pack 2016 Linux Node Agent
+Description                : Microsoft HPC Pack Linux node agent 2.x is an internal VM extension used to install necessary HPC Pack 2016 Linux agent and configure the Linux VMs. This is required for a Linux VM to join the HPC 
+                             Pack 2016 cluster and managed by HPC Pack head node for job scheduling and monitoring. 
+HostingResources           : VmRole
+PublicConfigurationSchema  : 
+PrivateConfigurationSchema : 
+BlockRoleUponFailure       : false
+ReplicationCompleted       : true
+Eula                       : http://go.microsoft.com/fwlink/?LinkID=507756
+PrivacyUri                 : http://go.microsoft.com/fwlink/?LinkID=507755
+HomepageUri                : http://www.microsoft.com/hpc
+IsJsonExtension            : true
+SupportedOS                : Linux
+CompanyName                : Microsoft
+PublishedDate              : 2016-11-10T03:42:33.2919251Z
+Regions                    : 
+
+ProviderNameSpace          : Microsoft.HpcPack
+Type                       : TestLinuxNodeAgent
+Version                    : 1.0.0.9
+Label                      : HPC Pack Linux Node Agent Internal Test
+Description                : Microsoft HPC Pack Linux node agent is an internal VM extension used to install necessary HPC Pack Linux agent and configure the Linux VMs. This is required for a Linux VM to join the HPC Pack 
+                             cluster and managed by HPC Pack head node for job scheduling and monitoring. 
+HostingResources           : VmRole
+PublicConfigurationSchema  : 
+PrivateConfigurationSchema : 
+BlockRoleUponFailure       : false
+ReplicationCompleted       : true
+Eula                       : http://go.microsoft.com/fwlink/?LinkID=507756
+PrivacyUri                 : http://go.microsoft.com/fwlink/?LinkID=507755
+HomepageUri                : http://www.microsoft.com/hpc
+IsJsonExtension            : true
+IsInternalExtension        : true
+SupportedOS                : Linux
+CompanyName                : Microsoft
+PublishedDate              : 2015-04-11T14:36:57.845748Z
+Regions                    : 
+
